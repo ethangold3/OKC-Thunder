@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 
+#read file into pandas
 shots = pd.read_csv('shots_data.csv')
 
+#create functions to add columns describing data
 def C3_conditions(s):
     if (abs(s['x'])>22) and (s['y'] <= 7.8):
         return 1
@@ -21,12 +23,12 @@ def TPT_conditions(s):
     else:
         return 0
 
-    
+#apply functions
 shots['C3'] = shots.apply(C3_conditions, axis=1)
 shots['NC3'] = shots.apply(NC3_conditions, axis=1)
 shots['2PT'] = shots.apply(TPT_conditions, axis=1)
 
-
+#create function that prints shot selection and EFG when given team and shot type
 def print_shot_report(team_name,col):
     print("Percent of Shots Attempted in ",col," Zone by ",team_name,": ", round(shots.loc[shots['team'] == team_name, col].mean(),3))
     filtered_shots =shots.loc[(shots[col] == 1) & (shots['team'] == team_name)]
